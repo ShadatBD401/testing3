@@ -2084,7 +2084,8 @@ input, textarea, select {
 
 .form-group textarea {
     resize: vertical;
-    min-height: 90px;
+    min-height: 100px;
+    line-height: 1.5;
 }
 
 .form-group select {
