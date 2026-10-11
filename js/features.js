@@ -1,43 +1,39 @@
 /* ============================================================
-   FEATURES: THEMES, GLOBAL SEARCH, CUSTOM CURSOR, TICKET TRACKING, CV
+   FEATURES: THEMES, GLOBAL SEARCH, CUSTOM CURSOR,
+             TICKET TRACKING, CV, GALLERY
    ============================================================ */
 
-// ── Theme Management ─────────────────────────────────────────
 const THEMES = ['dark', 'light', 'ocean', 'forest', 'sunset'];
 
+// ── Theme Management ─────────────────────────────────────────
 function initThemeSwitcher() {
     const switcher = document.getElementById('themeSwitcher');
     const toggle = document.getElementById('themeSwitcherToggle');
     const swatches = document.querySelectorAll('.theme-swatch');
     const themeToggle = document.getElementById('themeToggle');
 
-    // Load saved theme
     const savedTheme = Utils.getStorage(Utils.STORAGE_KEYS.THEME, 'dark');
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateSwatchUI(savedTheme);
+    updateThemeIcon(savedTheme);
 
-    // Toggle open/close
     toggle?.addEventListener('click', (e) => {
         e.stopPropagation();
-        switcher.classList.toggle('open');
+        switcher?.classList.toggle('open');
     });
 
-    // Click outside to close
     document.addEventListener('click', (e) => {
         if (switcher && !switcher.contains(e.target)) {
             switcher.classList.remove('open');
         }
     });
 
-    // Swatch clicks
     swatches.forEach(swatch => {
         swatch.addEventListener('click', () => {
-            const theme = swatch.dataset.theme;
-            applyTheme(theme);
+            applyTheme(swatch.dataset.theme);
         });
     });
 
-    // Navbar theme toggle cycles themes
     themeToggle?.addEventListener('click', (e) => {
         e.preventDefault();
         const current = Utils.getStorage(Utils.STORAGE_KEYS.THEME, 'dark');
@@ -95,6 +91,7 @@ function initGlobalSearch() {
             { title: 'Certifications', type: 'Section', icon: 'fa-certificate', action: () => goTo('certifications') },
             { title: 'Education', type: 'Section', icon: 'fa-graduation-cap', action: () => goTo('education') },
             { title: 'Learning Blog', type: 'Section', icon: 'fa-book', action: () => goTo('learning') },
+            { title: 'Gallery', type: 'Section', icon: 'fa-images', action: () => goTo('gallery') },
             { title: 'Contact', type: 'Section', icon: 'fa-envelope', action: () => goTo('contact') }
         ];
 
@@ -209,6 +206,7 @@ function initGlobalSearch() {
 // ── Custom Mouse Cursor (Smokey) ─────────────────────────────
 function initCustomCursor() {
     if (window.matchMedia('(hover: none)').matches) return;
+    if (document.querySelector('.custom-cursor')) return; // avoid duplicates
 
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
@@ -275,7 +273,7 @@ function initCustomCursor() {
 // ── Ticket Tracking ──────────────────────────────────────────
 function initTicketTracking() {
     const trackBtn = document.getElementById('trackTicketBtn');
-    const trackInput = document.getElementById('ticketTrackInput');
+    const trackInput = document.getElementById('trackTicketInput');
     const resultBox = document.getElementById('ticketTrackResult');
     if (!trackBtn || !trackInput || !resultBox) return;
 
@@ -285,10 +283,7 @@ function initTicketTracking() {
 
     function track() {
         const id = trackInput.value.trim();
-        if (!id) {
-            Utils.showToast('Please enter a ticket ID', 'error');
-            return;
-        }
+        if (!id) { Utils.showToast('Please enter a ticket ID', 'error'); return; }
 
         const tickets = Utils.getItems(Utils.STORAGE_KEYS.TICKETS);
         const ticket = tickets.find(t => t.id.toUpperCase() === id.toUpperCase());
@@ -301,7 +296,7 @@ function initTicketTracking() {
                         <div>
                             <p style="font-weight: 600;">Ticket Not Found</p>
                             <p style="color: var(--text-muted); font-size: 0.875rem;">
-                                No ticket with ID "${Utils.esc(id)}". Please check and try again.
+                                No ticket with ID "${Utils.esc(id)}".
                             </p>
                         </div>
                     </div>
@@ -358,10 +353,7 @@ function initCvViewer() {
 
     btn.addEventListener('click', () => {
         const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
-        if (!s.cvFile) {
-            Utils.showToast('CV not uploaded yet', 'warning');
-            return;
-        }
+        if (!s.cvFile) { Utils.showToast('CV not uploaded yet', 'warning'); return; }
         const link = document.createElement('a');
         link.href = s.cvFile;
         link.download = s.cvFileName || 'CV.pdf';
@@ -372,36 +364,37 @@ function initCvViewer() {
     });
 }
 
-// ── Apply Admin Settings to Public Site ──────────────────────
+// ── Apply Admin Settings on Public Site ──────────────────────
 function applySiteSettings() {
     const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
     if (!Object.keys(s).length) return;
 
-    // Profile image → Hero terminal (or avatar container)
+    // Profile image as floating avatar over hero terminal
     if (s.profileImage) {
         const heroTerminal = document.querySelector('.hero-terminal');
         if (heroTerminal && !document.getElementById('heroProfileImg')) {
             const avatar = document.createElement('div');
             avatar.id = 'heroProfileImg';
-            avatar.style.cssText = 'position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
+            avatar.style.cssText = 'position:absolute;top:-24px;right:-24px;width:96px;height:96px;border-radius:50%;overflow:hidden;border:3px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
             avatar.innerHTML = `<img src="${s.profileImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
             heroTerminal.style.position = 'relative';
             heroTerminal.appendChild(avatar);
         }
     }
 
-    // Social links in navbar
+    // Navbar social links
     const navSocial = document.querySelector('.nav-social');
     if (navSocial) {
         const links = [];
-        if (s.github) links.push(`<a href="${Utils.esc(s.github)}" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>`);
-        if (s.linkedin) links.push(`<a href="${Utils.esc(s.linkedin)}" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>`);
+        if (s.email) links.push(`<a href="mailto:${Utils.esc(s.email)}" title="Email"><i class="fas fa-envelope"></i></a>`);
         if (s.facebook) links.push(`<a href="${Utils.esc(s.facebook)}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>`);
+        if (s.linkedin) links.push(`<a href="${Utils.esc(s.linkedin)}" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>`);
         if (s.twitter) links.push(`<a href="${Utils.esc(s.twitter)}" target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a>`);
+        if (s.github) links.push(`<a href="${Utils.esc(s.github)}" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>`);
         if (links.length) navSocial.innerHTML = links.join('');
     }
 
-    // Dynamic contact links (LinkedIn, Facebook, Twitter, GitHub)
+    // Dynamic contact links
     const dyn = document.getElementById('dynamicContactLinks');
     if (dyn) {
         const extra = [];
@@ -412,7 +405,7 @@ function applySiteSettings() {
         dyn.innerHTML = extra.join('');
     }
 
-    // Update hero badge tagline
+    // Hero badge tagline
     if (s.tagline) {
         const badge = document.querySelector('.hero-badge span:last-child');
         if (badge) badge.textContent = s.tagline;
@@ -429,6 +422,109 @@ function contactCard(label, icon, url) {
     </a>`;
 }
 
+// ── Gallery ──────────────────────────────────────────────────
+function initGallery() {
+    const grid = document.getElementById('galleryGrid');
+    const filtersBox = document.getElementById('galleryFilters');
+    if (!grid) return;
+
+    let currentFilter = 'all';
+
+    function render() {
+        const items = Utils.getItems('sh_gallery').sort((a, b) =>
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        const filtered = currentFilter === 'all'
+            ? items
+            : items.filter(i => i.type === currentFilter);
+
+        if (!filtered.length) {
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align:center; padding: 3rem; color: var(--text-muted);">
+                    <i class="fas fa-images" style="font-size: 3rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+                    <p>No items in gallery yet.</p>
+                </div>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(item => {
+            if (item.type === 'video') {
+                const ytId = getYouTubeId(item.src);
+                const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+                return `
+                    <div class="gallery-item" data-id="${item.id}">
+                        ${thumb
+                            ? `<img src="${thumb}" alt="">`
+                            : `<div class="placeholder-video"><i class="fas fa-play-circle"></i></div>`}
+                        <div class="gallery-video-badge"><i class="fas fa-video"></i> Video</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">${Utils.esc(item.caption || 'Untitled')}</div>
+                            <div class="gallery-date">${Utils.formatDate(item.createdAt)}</div>
+                        </div>
+                    </div>`;
+            }
+            return `
+                <div class="gallery-item" data-id="${item.id}">
+                    <img src="${item.src}" alt="${Utils.esc(item.caption || '')}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">${Utils.esc(item.caption || 'Untitled')}</div>
+                        <div class="gallery-date">${Utils.formatDate(item.createdAt)}</div>
+                    </div>
+                </div>`;
+        }).join('');
+
+        grid.querySelectorAll('.gallery-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const item = Utils.getItems('sh_gallery').find(i => i.id === el.dataset.id);
+                if (item) openGalleryViewer(item);
+            });
+        });
+    }
+
+    function getYouTubeId(url) {
+        const m = (url || '').match(/(?:youtu\.be\/|v=|embed\/)([^&?/\s]+)/);
+        return m ? m[1] : null;
+    }
+
+    function openGalleryViewer(item) {
+        let mediaHtml;
+        if (item.type === 'video') {
+            const ytId = getYouTubeId(item.src);
+            if (ytId) {
+                mediaHtml = `<iframe width="100%" height="450" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen style="border-radius:var(--radius-lg);"></iframe>`;
+            } else {
+                mediaHtml = `<video src="${item.src}" controls style="width:100%;max-height:500px;border-radius:var(--radius-lg);"></video>`;
+            }
+        } else {
+            mediaHtml = `<img src="${item.src}" alt="" style="width:100%;max-height:70vh;object-fit:contain;border-radius:var(--radius-lg);">`;
+        }
+
+        Utils.openModal(item.caption || 'Gallery', `
+            <div style="text-align:center;">
+                ${mediaHtml}
+                ${item.caption ? `<p style="margin-top:1rem;color:var(--text-secondary);">${Utils.esc(item.caption)}</p>` : ''}
+                <p style="margin-top:0.5rem;color:var(--text-muted);font-size:0.75rem;">
+                    ${Utils.formatDate(item.createdAt)}
+                </p>
+            </div>
+        `);
+    }
+
+    filtersBox?.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        filtersBox.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.galleryFilter;
+        render();
+    });
+
+    window.addEventListener('storage', render);
+    window.addEventListener('gallery-updated', render);
+
+    render();
+}
+
 // ── Init on DOM ready ────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initThemeSwitcher();
@@ -437,4 +533,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initTicketTracking();
     initCvViewer();
     applySiteSettings();
+    initGallery();
 });
