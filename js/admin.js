@@ -29,6 +29,8 @@ async function sha256(str) {
 
 // ── Initialize ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Force dashboard page on load
+    adminState.currentPage = 'dashboard';
     checkSession();
     initLogin();
     initSidebar();
