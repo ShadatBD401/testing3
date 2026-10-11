@@ -62,14 +62,19 @@ function showDashboard() {
     document.getElementById('loginScreen')?.classList.add('hidden');
     document.getElementById('adminDashboard')?.classList.remove('hidden');
     
-    // Update admin name
     const adminName = document.getElementById('adminName');
     if (adminName) adminName.textContent = adminState.user?.username || 'Administrator';
     
-    // Load data
-    loadDashboardData();
+    // Always start on the dashboard page
+    adminState.currentPage = 'dashboard';
+    document.querySelectorAll('.sidebar-link').forEach(l => {
+        l.classList.toggle('active', l.dataset.page === 'dashboard');
+    });
+    document.querySelectorAll('.admin-page').forEach(p => {
+        p.classList.toggle('active', p.id === 'page-dashboard');
+    });
     
-    // Setup navigation
+    loadDashboardData();
     setupPageNavigation();
 }
 
