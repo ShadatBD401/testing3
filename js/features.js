@@ -342,7 +342,7 @@ function initTicketTracking() {
     trackInput.addEventListener('keypress', e => { if (e.key === 'Enter') track(); });
 }
 
-// ── CV Viewer ────────────────────────────────────────────────
+// ── CV Viewer (Preview + Download) ───────────────────────────
 function initCvViewer() {
     const btn = document.getElementById('viewCvBtn');
     const btnText = document.getElementById('cvBtnText');
@@ -354,13 +354,44 @@ function initCvViewer() {
     btn.addEventListener('click', () => {
         const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
         if (!s.cvFile) { Utils.showToast('CV not uploaded yet', 'warning'); return; }
-        const link = document.createElement('a');
-        link.href = s.cvFile;
-        link.download = s.cvFileName || 'CV.pdf';
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+
+        const fileName = s.cvFileName || 'CV.pdf';
+        const isPdf = fileName.toLowerCase().endsWith('.pdf');
+
+        const previewHtml = isPdf
+            ? `<iframe src="${s.cvFile}" style="width:100%;height:75vh;border:none;border-radius:var(--radius-md);background:#fff;" title="CV Preview"></iframe>`
+            : `<div style="text-align:center;padding:3rem 1rem;">
+                <i class="fas fa-file-alt" style="font-size:4rem;color:var(--accent-primary);margin-bottom:1rem;"></i>
+                <p style="color:var(--text-secondary);">Preview not available for this file type.</p>
+                <p style="color:var(--text-muted);font-size:0.875rem;">${Utils.esc(fileName)}</p>
+              </div>`;
+
+        Utils.openModal('Curriculum Vitae', `
+            <div style="position:relative;">
+                ${previewHtml}
+                <div style="position:absolute;top:-8px;right:-8px;display:flex;gap:0.5rem;">
+                    <a href="${s.cvFile}" download="${Utils.esc(fileName)}"
+                       class="btn btn-primary btn-sm"
+                       style="box-shadow:var(--shadow-lg);"
+                       title="Download CV">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            </div>
+        `);
+
+        // Ensure modal is large enough for CV preview
+        const modal = document.getElementById('modal');
+        if (modal) {
+            modal.style.maxWidth = '900px';
+            // Restore after close
+            const closeBtn = document.getElementById('modalClose');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.style.maxWidth = '';
+                }, { once: true });
+            }
+        }
     });
 }
 
