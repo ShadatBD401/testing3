@@ -2943,9 +2943,11 @@ input, textarea, select {
 /* ── Standard Contact Cards (Compact) ─────────────────────── */
 .contact-grid {
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 1fr 1fr;   /* equal halves — standard */
     gap: var(--space-2xl);
     align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .contact-info {
