@@ -312,12 +312,19 @@ input, textarea, select {
     left: 0;
     right: 0;
     height: var(--nav-height);
-    background: rgba(10, 14, 23, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: var(--bg-primary);   /* fully opaque fallback */
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
     transition: all var(--transition-base);
+}
+
+/* Use backdrop-filter only if supported AND not in screenshot mode */
+@supports (backdrop-filter: blur(20px)) {
+    .navbar {
+        background: color-mix(in srgb, var(--bg-primary) 90%, transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
 }
 
 .navbar.scrolled {
