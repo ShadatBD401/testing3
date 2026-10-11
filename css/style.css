@@ -3225,7 +3225,7 @@ input, textarea, select {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--bg-tertiary);
+    background: var(--gradient-primary);
     color: white;
     display: flex;
     align-items: center;
@@ -3238,14 +3238,36 @@ input, textarea, select {
     border: 2px solid var(--border-color);
     box-shadow: var(--shadow-md);
     transition: all var(--transition-fast);
+    isolation: isolate;
 }
 
+/* <SH/> logo behind the picture */
+.nav-avatar::before {
+    content: '<SH/>';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.03em;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Logo fallback when no picture (visible text) */
 .nav-avatar-logo {
     display: inline-flex;
     align-items: center;
     letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
 }
 
+/* Uploaded picture sits on TOP of the <SH/> background */
 .nav-avatar img {
     position: absolute;
     inset: 0;
@@ -3253,6 +3275,7 @@ input, textarea, select {
     height: 100%;
     object-fit: cover;
     display: block;
+    z-index: 1;              /* above the <SH/> ::before */
 }
 
 .nav-avatar:hover {
