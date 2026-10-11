@@ -79,7 +79,7 @@ function initLogin() {
     form.addEventListener('submit', handleLogin);
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -87,40 +87,46 @@ function handleLogin(e) {
     const rememberMe = document.getElementById('rememberMe').checked;
     const loginBtn = document.getElementById('loginBtn');
     
-    // Validate
     if (!username || !password) {
         Utils.showToast('Please enter username and password', 'error');
         return;
     }
     
-    // Show loading
     loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
     loginBtn.disabled = true;
     
-    // Simulate API call
-    setTimeout(() => {
-        if (username === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password) {
-            // Create session
-            const session = {
-                username,
-                loginAt: Date.now(),
-                expiresAt: Date.now() + (rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
-            };
-            
-            Utils.setStorage(Utils.STORAGE_KEYS.ADMIN_SESSION, session);
-            adminState.isAuthenticated = true;
-            adminState.user = session;
-            
-            Utils.logActivity('admin_login', { username });
-            
-            Utils.showToast('Welcome back!', 'success');
-            showDashboard();
-        } else {
-            Utils.showToast('Invalid credentials', 'error');
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-            loginBtn.disabled = false;
-        }
-    }, 1000);
+    // Hash inputs and compare — plaintext never stored in JS
+    const [userHash, passHash] = await Promise.all([
+        sha256(username),
+        sha256(password)
+    ]);
+    
+    // Optional: hash stored in localStorage overrides the default
+    const overrideHashes = Utils.getStorage('sh_admin_hashes', null);
+    const expected = overrideHashes || ADMIN_HASH;
+    
+    // Constant-time-ish comparison delay (mild mitigation)
+    await new Promise(r => setTimeout(r, 600));
+    
+    if (userHash === expected.username && passHash === expected.password) {
+        const session = {
+            username,
+            loginAt: Date.now(),
+            expiresAt: Date.now() + (rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
+        };
+        
+        Utils.setStorage(Utils.STORAGE_KEYS.ADMIN_SESSION, session);
+        adminState.isAuthenticated = true;
+        adminState.user = session;
+        
+        Utils.logActivity('admin_login', { username });
+        Utils.showToast('Welcome back!', 'success');
+        showDashboard();
+    } else {
+        Utils.showToast('Invalid credentials', 'error');
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+        loginBtn.disabled = false;
+    }
 }
 
 // ── Logout ───────────────────────────────────────────────────
