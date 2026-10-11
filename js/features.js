@@ -354,6 +354,7 @@ function initTicketTracking() {
     trackInput.addEventListener('keypress', e => { if (e.key === 'Enter') track(); });
 }
 
+
 // ── CV Viewer (Preview + Download) ───────────────────────────
 function initCvViewer() {
     const btn = document.getElementById('viewCvBtn');
@@ -392,11 +393,9 @@ function initCvViewer() {
             </div>
         `);
 
-        // Ensure modal is large enough for CV preview
         const modal = document.getElementById('modal');
         if (modal) {
             modal.style.maxWidth = '900px';
-            // Restore after close
             const closeBtn = document.getElementById('modalClose');
             if (closeBtn) {
                 closeBtn.addEventListener('click', () => {
@@ -407,17 +406,34 @@ function initCvViewer() {
     });
 }
 
-    // Navbar avatar
+// ── Apply Admin Settings on Public Site ──────────────────────
+function applySiteSettings() {
+    const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+    if (!Object.keys(s).length) return;
+
+    // Navbar avatar (small picture inside the logo circle)
     if (s.profileImage) {
         const navAvatar = document.getElementById('navAvatar');
         if (navAvatar) {
             navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
         }
     }
-        
-        
 
-    // Navbar social links
+    // Hero terminal floating avatar (BIG picture on 2nd position)
+    // This is the "awkward floating avatar over terminal" you want back
+    if (s.profileImage) {
+        const heroTerminal = document.querySelector('.hero-terminal');
+        if (heroTerminal && !document.getElementById('heroProfileImg')) {
+            const avatar = document.createElement('div');
+            avatar.id = 'heroProfileImg';
+            avatar.style.cssText = 'position:absolute;top:-28px;right:-28px;width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
+            avatar.innerHTML = `<img src="${s.profileImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+            heroTerminal.style.position = 'relative';
+            heroTerminal.appendChild(avatar);
+        }
+    }
+
+    // Navbar social links (right side)
     const navSocial = document.querySelector('.nav-social');
     if (navSocial) {
         const links = [];
@@ -445,6 +461,31 @@ function initCvViewer() {
         const badge = document.querySelector('.hero-badge span:last-child');
         if (badge) badge.textContent = s.tagline;
     }
+
+    // Apply visibility toggles
+    const visibility = s.visibility || {};
+    const sectionMap = {
+        about: 'about',
+        experience: 'experience',
+        technical: 'technical',
+        projects: 'projects',
+        certifications: 'certifications',
+        education: 'education',
+        learning: 'learning',
+        gallery: 'gallery',
+        contact: 'contact'
+    };
+    Object.entries(sectionMap).forEach(([key, id]) => {
+        const section = document.getElementById(id);
+        const navLink = document.querySelector(`.nav-link[data-section="${id}"]`);
+        if (visibility[key] === false) {
+            if (section) section.style.display = 'none';
+            if (navLink) navLink.style.display = 'none';
+        } else {
+            if (section) section.style.display = '';
+            if (navLink) navLink.style.display = '';
+        }
+    });
 }
 
 function contactCard(label, icon, url) {
