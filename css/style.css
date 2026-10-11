@@ -2852,7 +2852,7 @@ input, textarea, select {
     border-radius: 50%;
     pointer-events: none;
     z-index: 100000;
-    transition: width 0.10s ease, height 0.10s ease, background 0.10s ease;
+    transition: width 0.50s ease, height 0.50s ease, background 0.50s ease;
     top: 0;
     left: 0;
     will-change: transform;
