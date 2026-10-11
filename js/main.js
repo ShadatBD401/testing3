@@ -16,6 +16,18 @@ const state = {
 
 // ── Initialization ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Always start at the top on every page load/refresh.
+    // Prevents browser restore-scroll from landing on a deep section.
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // Clear any deep-link hash so reload always shows Home
+    if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname);
+    }
+
     initTheme();
     initPreloader();
     initNavigation();
