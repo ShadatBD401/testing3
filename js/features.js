@@ -236,16 +236,16 @@ function initCustomCursor() {
     });
 
     function animate() {
-        cX += (mouseX - cX) * 0.5;
-        cY += (mouseY - cY) * 0.5;
+        cX += (mouseX - cX) * 0.85;   // was 0.5
+        cY += (mouseY - cY) * 0.85;
         cursor.style.transform = `translate(${cX - 6}px, ${cY - 6}px)`;
 
-        fX += (mouseX - fX) * 0.15;
-        fY += (mouseY - fY) * 0.15;
+        fX += (mouseX - fX) * 0.45;   // was 0.15
+        fY += (mouseY - fY) * 0.45;
         follower.style.transform = `translate(${fX - 20}px, ${fY - 20}px)`;
 
-        sX += (mouseX - sX) * 0.08;
-        sY += (mouseY - sY) * 0.08;
+        sX += (mouseX - sX) * 0.25;   // was 0.08
+        sY += (mouseY - sY) * 0.25;
         smoke.style.transform = `translate(${sX - 100}px, ${sY - 100}px)`;
 
         requestAnimationFrame(animate);
