@@ -2016,22 +2016,26 @@ input, textarea, select {
 }
 
 .contact-form-container {
-    padding: var(--space-lg);
+    max-width: 560px;             /* standard form width */
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-xl);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
 }
 
 .contact-form h3 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: var(--space-xs);
+    margin-bottom: 4px;
 }
 
 .contact-form > p {
     color: var(--text-secondary);
     font-size: 0.875rem;
     margin-bottom: var(--space-lg);
+    line-height: 1.5;
 }
 
 .form-row {
