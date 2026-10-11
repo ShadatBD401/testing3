@@ -1340,34 +1340,44 @@ input, textarea, select {
 }
 
 .skill-icon {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background: var(--bg-tertiary);
-    font-size: 1.5rem;
-    margin-bottom: var(--space-lg);
+    font-size: 1.25rem;
+    margin-bottom: var(--space-md);
     color: var(--accent-primary);
 }
 
 .skill-card h3 {
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     font-weight: 600;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
 .skill-card p {
     color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: var(--space-lg);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .skill-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm);
+    gap: 6px;
+}
+
+.skill-tags .tag {
+    padding: 3px 10px;
+    font-size: 0.6875rem;
 }
 
 .skill-tags .tag {
