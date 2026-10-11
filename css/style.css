@@ -2041,11 +2041,11 @@ input, textarea, select {
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
+    gap: 12px;
 }
 
 .form-group {
-    margin-bottom: var(--space-md);
+    margin-bottom: 14px;
 }
 
 .form-group label {
