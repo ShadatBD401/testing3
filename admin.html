@@ -331,6 +331,106 @@
                 </div>
                 
                 <div class="settings-container">
+
+                    <!-- NEW: Profile Settings -->
+                    <div class="settings-section">
+                        <h2>Profile Settings</h2>
+                        <div class="setting-item profile-upload-section">
+                            <div class="setting-info">
+                                <h4>Profile Picture</h4>
+                                <p>Upload your photo (appears in the hero section)</p>
+                            </div>
+                            <div class="profile-upload-container">
+                                <div class="profile-preview" id="profilePreview">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <input type="file" id="profileImageInput" accept="image/*" hidden>
+                                <button class="btn btn-outline btn-sm" onclick="document.getElementById('profileImageInput').click()">
+                                    <i class="fas fa-upload"></i> Upload
+                                </button>
+                                <button class="btn btn-danger btn-sm" id="removeProfileBtn">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Display Name</h4>
+                                <p>Your name shown on the website</p>
+                            </div>
+                            <input type="text" class="setting-input" id="settingDisplayName" value="Shadat Hossain">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Professional Title</h4>
+                                <p>Your role / title</p>
+                            </div>
+                            <input type="text" class="setting-input" id="settingTitle" value="Network & Security Engineer">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Tagline / Badge Text</h4>
+                                <p>Short status text shown in hero badge</p>
+                            </div>
+                            <input type="text" class="setting-input" id="settingTagline" value="Available for opportunities">
+                        </div>
+                    </div>
+
+                    <!-- NEW: Social Media Links -->
+                    <div class="settings-section">
+                        <h2>Social Media Links</h2>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fab fa-github"></i> GitHub</h4></div>
+                            <input type="url" class="setting-input" id="settingGithub" placeholder="https://github.com/username">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fab fa-linkedin"></i> LinkedIn</h4></div>
+                            <input type="url" class="setting-input" id="settingLinkedin" placeholder="https://linkedin.com/in/username">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fab fa-twitter"></i> Twitter / X</h4></div>
+                            <input type="url" class="setting-input" id="settingTwitter" placeholder="https://twitter.com/username">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fab fa-facebook"></i> Facebook</h4></div>
+                            <input type="url" class="setting-input" id="settingFacebook" placeholder="https://facebook.com/username">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fab fa-whatsapp"></i> WhatsApp</h4></div>
+                            <input type="url" class="setting-input" id="settingWhatsapp" placeholder="https://wa.me/8801XXXXXXXXX">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fas fa-envelope"></i> Email</h4></div>
+                            <input type="email" class="setting-input" id="settingEmail" placeholder="your@email.com">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4><i class="fas fa-phone"></i> Phone</h4></div>
+                            <input type="tel" class="setting-input" id="settingPhone" placeholder="+880 1XXX XXXXXX">
+                        </div>
+                    </div>
+
+                    <!-- NEW: CV / Resume -->
+                    <div class="settings-section">
+                        <h2>CV / Resume</h2>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>CV File</h4>
+                                <p>Upload your CV (PDF recommended)</p>
+                            </div>
+                            <div class="profile-upload-container">
+                                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" hidden>
+                                <button class="btn btn-outline btn-sm" onclick="document.getElementById('cvFileInput').click()">
+                                    <i class="fas fa-upload"></i> Upload CV
+                                </button>
+                                <span id="cvFileName" style="font-size: 0.875rem; color: var(--text-muted);">No file uploaded</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><h4>CV Button Text</h4></div>
+                            <input type="text" class="setting-input" id="settingCvButtonText" value="View CV">
+                        </div>
+                    </div>
+
                     <div class="settings-section">
                         <h2>General Settings</h2>
                         <div class="setting-item">
