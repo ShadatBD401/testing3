@@ -1307,10 +1307,10 @@ input, textarea, select {
 }
 
 .skill-card {
-    padding: var(--space-xl);
+    padding: var(--space-lg);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
