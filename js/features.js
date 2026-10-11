@@ -401,15 +401,6 @@ function initCvViewer() {
         if (navAvatar) {
             navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
         }
-        const heroTerminal = document.querySelector('.hero-terminal');
-        if (heroTerminal && !document.getElementById('heroProfileImg')) {
-            const avatar = document.createElement('div');
-            avatar.id = 'heroProfileImg';
-            avatar.style.cssText = 'position:absolute;top:-24px;right:-24px;width:96px;height:96px;border-radius:50%;overflow:hidden;border:3px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
-            avatar.innerHTML = `<img src="${s.profileImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
-            heroTerminal.style.position = 'relative';
-            heroTerminal.appendChild(avatar);
-        }
     }
         
         
