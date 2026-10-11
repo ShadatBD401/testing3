@@ -123,3 +123,188 @@ function saveAllSettings() {
     Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
     Utils.showToast('All settings saved successfully', 'success');
 }
+
+/* ============================================================
+   ADMIN GALLERY & POC VIDEOS
+   ============================================================ */
+
+const GALLERY_KEY = 'sh_gallery';
+
+// Wrap existing navigateToPage
+(function hookNavigation() {
+    const orig = window.navigateToPage;
+    if (typeof orig !== 'function') return;
+    window.navigateToPage = function(page) {
+        orig(page);
+        if (page === 'gallery') renderAdminGallery();
+        if (page === 'videos')  renderAdminVideos();
+    };
+})();
+
+// ── Gallery ──────────────────────────────────────────────────
+function renderAdminGallery() {
+    const c = document.getElementById('galleryContainer');
+    if (!c) return;
+    const items = Utils.getItems(GALLERY_KEY).sort((a, b) =>
+        new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (!items.length) {
+        c.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;">
+            <i class="fas fa-images"></i>
+            <h3>No gallery items</h3>
+            <p>Click "New Item" to add a photo or video.</p>
+        </div>`;
+    } else {
+        c.innerHTML = items.map(item => `
+            <div class="admin-item-card">
+                <div class="admin-item-header">
+                    <div class="admin-item-icon">
+                        ${item.type === 'video' ? '<i class="fas fa-video"></i>' : '<i class="fas fa-image"></i>'}
+                    </div>
+                    <div class="admin-item-actions">
+                        <button class="admin-item-btn" onclick="editGalleryItem('${item.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-item-btn delete" onclick="deleteGalleryItem('${item.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <h4 class="admin-item-title">${Utils.esc(item.caption || 'Untitled')}</h4>
+                <p class="admin-item-desc">${item.type === 'video' ? 'Video' : 'Image'} • ${Utils.formatDate(item.createdAt)}</p>
+            </div>
+        `).join('');
+    }
+
+    // Wire "New Item" button
+    const btn = document.getElementById('newGalleryBtn');
+    if (btn && !btn.dataset.wired) {
+        btn.dataset.wired = '1';
+        btn.addEventListener('click', () => openGalleryForm());
+    }
+}
+
+function openGalleryForm(item = null) {
+    const isEdit = !!item;
+    Utils.openModal(isEdit ? 'Edit Gallery Item' : 'New Gallery Item', `
+        <div class="admin-form">
+            <div class="form-group">
+                <label for="galType">Type *</label>
+                <select id="galType">
+                    <option value="image" ${item?.type === 'image' ? 'selected' : ''}>Image</option>
+                    <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Video (YouTube/Vimeo URL or direct link)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="galCaption">Caption</label>
+                <input type="text" id="galCaption" value="${item ? Utils.esc(item.caption || '') : ''}" placeholder="Short description">
+            </div>
+            <div class="form-group">
+                <label for="galUrl">URL (for videos) or Upload Image *</label>
+                <input type="url" id="galUrl" value="${item && item.type === 'video' ? Utils.esc(item.src) : ''}" placeholder="https://youtube.com/watch?v=...">
+                <input type="file" id="galFile" accept="image/*" style="margin-top:0.5rem;">
+                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">
+                    ${isEdit ? 'Leave blank to keep current media.' : 'Upload an image OR paste a video URL.'}
+                </p>
+            </div>
+            <div class="admin-form-actions">
+                <button class="btn btn-outline" onclick="Utils.closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveGalleryItem('${item?.id || ''}')">
+                    <i class="fas fa-save"></i> ${isEdit ? 'Update' : 'Create'}
+                </button>
+            </div>
+        </div>
+    `);
+}
+
+window.editGalleryItem = function(id) {
+    const item = Utils.getItems(GALLERY_KEY).find(i => i.id === id);
+    if (item) openGalleryForm(item);
+};
+
+window.deleteGalleryItem = function(id) {
+    if (!confirm('Delete this gallery item?')) return;
+    Utils.saveItems(GALLERY_KEY, Utils.getItems(GALLERY_KEY).filter(i => i.id !== id));
+    Utils.showToast('Deleted', 'success');
+    renderAdminGallery();
+};
+
+window.saveGalleryItem = async function(id) {
+    const type = document.getElementById('galType').value;
+    const caption = document.getElementById('galCaption').value.trim();
+    const url = document.getElementById('galUrl').value.trim();
+    const fileInput = document.getElementById('galFile');
+    const file = fileInput.files[0];
+
+    let src = url;
+    if (file) {
+        if (file.size > 4 * 1024 * 1024) { Utils.showToast('Image must be under 4MB', 'error'); return; }
+        try { src = await Utils.readFileAsDataURL(file); }
+        catch { Utils.showToast('Failed to read file', 'error'); return; }
+    }
+
+    if (!src) { Utils.showToast('Please provide a URL or upload a file', 'error'); return; }
+
+    const items = Utils.getItems(GALLERY_KEY);
+    if (id) {
+        const idx = items.findIndex(i => i.id === id);
+        if (idx > -1) items[idx] = { ...items[idx], type, caption, src };
+    } else {
+        items.unshift({
+            id: Utils.uid(), type, caption, src,
+            createdAt: new Date().toISOString()
+        });
+    }
+    Utils.saveItems(GALLERY_KEY, items);
+    Utils.closeModal();
+    Utils.showToast(id ? 'Updated' : 'Created', 'success');
+    renderAdminGallery();
+};
+
+// ── POC Videos (uses same store, filtered to type=video) ─────
+function renderAdminVideos() {
+    const c = document.getElementById('videosContainer');
+    if (!c) return;
+    const items = Utils.getItems(GALLERY_KEY)
+        .filter(i => i.type === 'video')
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (!items.length) {
+        c.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;">
+            <i class="fas fa-video"></i>
+            <h3>No POC videos</h3>
+            <p>Click "New Video" to add a bug bounty proof of concept.</p>
+        </div>`;
+    } else {
+        c.innerHTML = items.map(item => `
+            <div class="admin-item-card">
+                <div class="admin-item-header">
+                    <div class="admin-item-icon"><i class="fas fa-video"></i></div>
+                    <div class="admin-item-actions">
+                        <button class="admin-item-btn" onclick="editGalleryItem('${item.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-item-btn delete" onclick="deleteGalleryItem('${item.id}'); renderAdminVideos();" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <h4 class="admin-item-title">${Utils.esc(item.caption || 'Untitled')}</h4>
+                <p class="admin-item-desc">${Utils.esc(item.src)}</p>
+            </div>
+        `).join('');
+    }
+
+    const btn = document.getElementById('newVideoBtn');
+    if (btn && !btn.dataset.wired) {
+        btn.dataset.wired = '1';
+        btn.addEventListener('click', () => {
+            // Force type=video by pre-opening form
+            openGalleryForm({ type: 'video', caption: '', src: '' });
+            setTimeout(() => {
+                const sel = document.getElementById('galType');
+                if (sel) sel.value = 'video';
+            }, 50);
+        });
+    }
+}
