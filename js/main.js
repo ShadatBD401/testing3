@@ -32,21 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Theme Initialization ─────────────────────────────────────
 function initTheme() {
+    // Theme init is now handled by features.js (multi-theme system).
+    // Just make sure the data-theme attribute is set on load.
     const savedTheme = Utils.getTheme();
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    
-    // Inline the icon update — no dependency on Utils.updateThemeIcon
-    const toggle = document.getElementById('themeToggle');
-    if (toggle) {
-        const icon = toggle.querySelector('i');
-        if (icon) {
-            icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-        }
-        
-        toggle.addEventListener('click', () => {
-            const newTheme = Utils.toggleTheme();
-            Utils.showToast(`Switched to ${newTheme} mode`, 'info');
-        });
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
     }
 }
 
