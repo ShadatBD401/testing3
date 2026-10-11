@@ -46,7 +46,7 @@ function initProfileSettings() {
     });
 
     removeBtn?.addEventListener('click', () => {
-        profilePreview.innerHTML = '<span class="nav-avatar-logo" style="font-size: 0.75rem; color: var(--text-muted);"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span>';
+        profilePreview.innerHTML = '<span class="nav-avatar-logo"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span>';
         profilePreview.classList.remove('has-image');
         const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
         delete s.profileImage;
