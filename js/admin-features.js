@@ -1,9 +1,8 @@
 /* ============================================================
-   ADMIN FEATURES: PROFILE UPLOAD, SOCIAL LINKS, CV, SETTINGS SAVE
+   ADMIN FEATURES: PROFILE UPLOAD, SOCIAL LINKS, CV, SETTINGS, GALLERY
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Only run on admin page
     if (!document.getElementById('adminDashboard')) return;
     initProfileSettings();
     loadAllSettings();
@@ -17,7 +16,6 @@ function initProfileSettings() {
     const cvInput = document.getElementById('cvFileInput');
     const cvFileName = document.getElementById('cvFileName');
 
-    // Load existing
     const settings = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
     if (settings.profileImage && profilePreview) {
         profilePreview.innerHTML = `<img src="${settings.profileImage}" alt="Profile">`;
@@ -30,10 +28,7 @@ function initProfileSettings() {
     profileInput?.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.size > 2 * 1024 * 1024) {
-            Utils.showToast('Image must be under 2MB', 'error');
-            return;
-        }
+        if (file.size > 2 * 1024 * 1024) { Utils.showToast('Image must be under 2MB', 'error'); return; }
         try {
             const dataUrl = await Utils.readFileAsDataURL(file);
             profilePreview.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
@@ -42,9 +37,7 @@ function initProfileSettings() {
             s.profileImage = dataUrl;
             Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
             Utils.showToast('Profile picture updated', 'success');
-        } catch {
-            Utils.showToast('Failed to upload image', 'error');
-        }
+        } catch { Utils.showToast('Failed to upload image', 'error'); }
     });
 
     removeBtn?.addEventListener('click', () => {
@@ -59,10 +52,7 @@ function initProfileSettings() {
     cvInput?.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.size > 5 * 1024 * 1024) {
-            Utils.showToast('CV must be under 5MB', 'error');
-            return;
-        }
+        if (file.size > 5 * 1024 * 1024) { Utils.showToast('CV must be under 5MB', 'error'); return; }
         try {
             const dataUrl = await Utils.readFileAsDataURL(file);
             cvFileName.textContent = file.name;
@@ -71,15 +61,12 @@ function initProfileSettings() {
             s.cvFileName = file.name;
             Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
             Utils.showToast('CV uploaded', 'success');
-        } catch {
-            Utils.showToast('Failed to upload CV', 'error');
-        }
+        } catch { Utils.showToast('Failed to upload CV', 'error'); }
     });
 }
 
 function loadAllSettings() {
     const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
-
     const map = {
         settingSiteTitle: s.siteTitle || 'Shadat Hossain',
         settingSiteDesc: s.siteDesc || 'Network & Security Engineer Portfolio',
@@ -96,12 +83,10 @@ function loadAllSettings() {
         settingPhone: s.phone || '+880 1575 382663',
         settingNotifyEmail: s.notifyEmail || 'sahadat.bda35@gmail.com'
     };
-
     Object.entries(map).forEach(([id, val]) => {
         const el = document.getElementById(id);
         if (el) el.value = val;
     });
-
     const autoReply = document.getElementById('settingAutoReply');
     if (autoReply) autoReply.checked = s.autoReply !== false;
 }
@@ -127,17 +112,14 @@ function saveAllSettings() {
         'settingTwitter', 'settingFacebook', 'settingWhatsapp', 'settingEmail',
         'settingPhone', 'settingNotifyEmail'
     ];
-
     fields.forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         const key = id.replace('setting', '').replace(/^./, c => c.toLowerCase());
         s[key] = el.value;
     });
-
     const autoReply = document.getElementById('settingAutoReply');
     if (autoReply) s.autoReply = autoReply.checked;
-
     Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
     Utils.showToast('All settings saved successfully', 'success');
 }
