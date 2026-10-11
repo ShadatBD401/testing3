@@ -13,10 +13,15 @@ function initProfileSettings() {
     const profileInput = document.getElementById('profileImageInput');
     const profilePreview = document.getElementById('profilePreview');
     const removeBtn = document.getElementById('removeProfileBtn');
+    const heroInput = document.getElementById('heroImageInput');
+    const heroPreview = document.getElementById('heroImagePreview');
+    const removeHeroBtn = document.getElementById('removeHeroImageBtn');
     const cvInput = document.getElementById('cvFileInput');
     const cvFileName = document.getElementById('cvFileName');
 
     const settings = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+
+    // ── Navbar avatar ────────────────────────────────────────
     if (settings.profileImage && profilePreview) {
         profilePreview.innerHTML = `<img src="${settings.profileImage}" alt="Profile">`;
         profilePreview.classList.add('has-image');
@@ -36,19 +41,50 @@ function initProfileSettings() {
             const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
             s.profileImage = dataUrl;
             Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
-            Utils.showToast('Profile picture updated', 'success');
+            Utils.showToast('Navbar avatar updated', 'success');
         } catch { Utils.showToast('Failed to upload image', 'error'); }
     });
 
     removeBtn?.addEventListener('click', () => {
-        profilePreview.innerHTML = '<i class="fas fa-user"></i>';
+        profilePreview.innerHTML = '<span class="nav-avatar-logo" style="font-size: 0.75rem; color: var(--text-muted);"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span>';
         profilePreview.classList.remove('has-image');
         const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
         delete s.profileImage;
         Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
-        Utils.showToast('Profile picture removed', 'success');
+        Utils.showToast('Navbar avatar removed', 'success');
     });
 
+    // ── Hero terminal picture ────────────────────────────────
+    if (settings.heroImage && heroPreview) {
+        heroPreview.innerHTML = `<img src="${settings.heroImage}" alt="Hero">`;
+        heroPreview.classList.add('has-image');
+    }
+
+    heroInput?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 3 * 1024 * 1024) { Utils.showToast('Hero image must be under 3MB', 'error'); return; }
+        try {
+            const dataUrl = await Utils.readFileAsDataURL(file);
+            heroPreview.innerHTML = `<img src="${dataUrl}" alt="Hero">`;
+            heroPreview.classList.add('has-image');
+            const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+            s.heroImage = dataUrl;
+            Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
+            Utils.showToast('Hero picture updated', 'success');
+        } catch { Utils.showToast('Failed to upload image', 'error'); }
+    });
+
+    removeHeroBtn?.addEventListener('click', () => {
+        heroPreview.innerHTML = '<i class="fas fa-user-circle"></i>';
+        heroPreview.classList.remove('has-image');
+        const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+        delete s.heroImage;
+        Utils.setStorage(Utils.STORAGE_KEYS.SETTINGS, s);
+        Utils.showToast('Hero picture removed', 'success');
+    });
+
+    // ── CV upload ────────────────────────────────────────────
     cvInput?.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
