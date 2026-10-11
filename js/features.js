@@ -268,6 +268,18 @@ function initCustomCursor() {
     });
     document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
     document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
+
+    // Hide cursor when window loses focus (e.g. during screenshots)
+    window.addEventListener('blur', () => {
+        cursor.style.display = 'none';
+        follower.style.display = 'none';
+        smoke.style.display = 'none';
+    });
+    window.addEventListener('focus', () => {
+        cursor.style.display = '';
+        follower.style.display = '';
+        smoke.style.display = '';
+    });
 }
 
 // ── Ticket Tracking ──────────────────────────────────────────
