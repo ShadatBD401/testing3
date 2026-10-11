@@ -111,6 +111,14 @@ function ensureSaveButton() {
 
 function saveAllSettings() {
     const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+
+    // Save visibility
+    s.visibility = s.visibility || {};
+    ['about','experience','technical','projects','certifications','education','learning','gallery','contact'].forEach(sec => {
+        const el = document.getElementById('vis_' + sec);
+        if (el) s.visibility[sec] = el.checked;
+    });
+
     const fields = [
         'settingSiteTitle', 'settingSiteDesc', 'settingDisplayName', 'settingTitle',
         'settingTagline', 'settingCvButtonText', 'settingGithub', 'settingLinkedin',
