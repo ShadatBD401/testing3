@@ -67,6 +67,11 @@ function initProfileSettings() {
 
 function loadAllSettings() {
     const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+    // Load visibility toggles
+    ['about','experience','technical','projects','certifications','education','learning','gallery','contact'].forEach(sec => {
+        const el = document.getElementById('vis_' + sec);
+        if (el) el.checked = (s.visibility || {})[sec] !== false;   // default true
+    });
     const map = {
         settingSiteTitle: s.siteTitle || 'Shadat Hossain',
         settingSiteDesc: s.siteDesc || 'Network & Security Engineer Portfolio',
