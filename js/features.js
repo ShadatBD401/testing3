@@ -410,6 +410,9 @@ function applySiteSettings() {
             avatar.innerHTML = `<img src="${s.profileImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
             heroTerminal.style.position = 'relative';
             heroTerminal.appendChild(avatar);
+        const navAvatar = document.getElementById('navAvatar');
+        if (navAvatar) {
+            navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
         }
     }
 
