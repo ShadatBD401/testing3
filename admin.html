@@ -371,17 +371,21 @@
                 
                 <div class="settings-container">
 
-                    <!-- NEW: Profile Settings -->
+                    <!-- Profile Settings -->
                     <div class="settings-section">
                         <h2>Profile Settings</h2>
+
+                        <!-- Navbar avatar image -->
                         <div class="setting-item profile-upload-section">
                             <div class="setting-info">
-                                <h4>Profile Picture</h4>
-                                <p>Upload your photo (appears in the hero section)</p>
+                                <h4>Navbar Avatar Picture</h4>
+                                <p>Small round picture in the top-left navbar (falls back to the &lt;SH/&gt; logo if empty)</p>
                             </div>
                             <div class="profile-upload-container">
                                 <div class="profile-preview" id="profilePreview">
-                                    <i class="fas fa-user"></i>
+                                    <span class="nav-avatar-logo" style="font-size: 0.75rem; color: var(--text-muted);">
+                                        <span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span>
+                                    </span>
                                 </div>
                                 <input type="file" id="profileImageInput" accept="image/*" hidden>
                                 <button class="btn btn-outline btn-sm" onclick="document.getElementById('profileImageInput').click()">
@@ -392,6 +396,27 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Hero terminal big image -->
+                        <div class="setting-item profile-upload-section">
+                            <div class="setting-info">
+                                <h4>Hero Terminal Picture</h4>
+                                <p>Big round picture floating over the terminal on the hero section</p>
+                            </div>
+                            <div class="profile-upload-container">
+                                <div class="profile-preview" id="heroImagePreview">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <input type="file" id="heroImageInput" accept="image/*" hidden>
+                                <button class="btn btn-outline btn-sm" onclick="document.getElementById('heroImageInput').click()">
+                                    <i class="fas fa-upload"></i> Upload
+                                </button>
+                                <button class="btn btn-danger btn-sm" id="removeHeroImageBtn">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="setting-item">
                             <div class="setting-info">
                                 <h4>Display Name</h4>
