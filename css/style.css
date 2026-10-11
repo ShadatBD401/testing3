@@ -3222,3 +3222,54 @@ input, textarea, select {
     transform: scale(1.05);
     border-color: var(--accent-primary);
 }
+
+
+/* ── Navbar Compact Overrides ─────────────────────────────── */
+:root {
+    --nav-height: 68px;
+}
+
+.nav-link {
+    padding: 6px 10px;
+    font-size: 0.8125rem;
+    gap: 4px;
+}
+
+.nav-link i { display: none; }  /* Hide icons, text-only menu */
+
+.nav-menu { gap: 2px; }
+
+.nav-social a {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8125rem;
+}
+
+.admin-btn {
+    padding: 6px 10px;
+    font-size: 0.8125rem;
+}
+
+.search-trigger,
+.theme-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8125rem;
+}
+
+.logo-name { font-size: 0.9375rem; }
+.logo-role { font-size: 0.6875rem; }
+
+/* Footer social — add more socials */
+.footer-social a {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 1199px) {
+    .nav-link {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+    }
+}
