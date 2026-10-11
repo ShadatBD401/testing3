@@ -828,6 +828,21 @@
                                 <span>Submit Ticket</span>
                             </button>
                         </form>
+
+                        <!-- NEW: Ticket tracker -->
+                        <div class="ticket-tracker-section" style="margin-top: var(--space-xl); padding-top: var(--space-xl); border-top: 1px solid var(--border-color);">
+                            <h4 style="margin-bottom: var(--space-sm);"><i class="fas fa-search"></i> Track Your Ticket</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">
+                                Enter your ticket ID to check the status of your inquiry.
+                            </p>
+                            <div class="ticket-tracker">
+                                <input type="text" id="ticketTrackInput" placeholder="TKT-XXXXXXXX-XXXX">
+                                <button class="btn btn-primary" id="trackTicketBtn">
+                                    <i class="fas fa-search"></i> Track
+                                </button>
+                            </div>
+                            <div id="ticketTrackResult"></div>
+                        </div>
                     </div>
                 </div>
             </div>
