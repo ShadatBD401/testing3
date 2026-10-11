@@ -2037,18 +2037,18 @@ input, textarea, select {
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
+    gap: var(--space-md);
 }
 
 .form-group {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
 }
 
 .form-group label {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 500;
-    margin-bottom: var(--space-sm);
+    margin-bottom: 6px;
     color: var(--text-secondary);
 }
 
@@ -2056,12 +2056,12 @@ input, textarea, select {
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: var(--space-md);
+    padding: 10px 12px;
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     color: var(--text-primary);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     transition: all var(--transition-fast);
 }
 
