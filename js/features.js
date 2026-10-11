@@ -411,25 +411,33 @@ function applySiteSettings() {
     const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
     if (!Object.keys(s).length) return;
 
-    // Navbar avatar (small picture inside the logo circle)
-    if (s.profileImage) {
-        const navAvatar = document.getElementById('navAvatar');
-        if (navAvatar) {
+    // Navbar avatar (uses profileImage)
+    const navAvatar = document.getElementById('navAvatar');
+    if (navAvatar) {
+        if (s.profileImage) {
             navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
+        } else {
+            // No image → keep the <SH/> logo fallback
+            navAvatar.innerHTML = `<span class="nav-avatar-logo"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span>`;
         }
     }
 
-    // Hero terminal floating avatar (BIG picture on 2nd position)
-    // This is the "awkward floating avatar over terminal" you want back
-    if (s.profileImage) {
-        const heroTerminal = document.querySelector('.hero-terminal');
-        if (heroTerminal && !document.getElementById('heroProfileImg')) {
-            const avatar = document.createElement('div');
-            avatar.id = 'heroProfileImg';
-            avatar.style.cssText = 'position:absolute;top:-28px;right:-28px;width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
-            avatar.innerHTML = `<img src="${s.profileImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
-            heroTerminal.style.position = 'relative';
-            heroTerminal.appendChild(avatar);
+    // Hero terminal floating avatar (uses heroImage)
+    const heroTerminal = document.querySelector('.hero-terminal');
+    if (heroTerminal) {
+        let heroAvatar = document.getElementById('heroProfileImg');
+        if (s.heroImage) {
+            if (!heroAvatar) {
+                heroAvatar = document.createElement('div');
+                heroAvatar.id = 'heroProfileImg';
+                heroAvatar.style.cssText = 'position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;overflow:hidden;border:4px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
+                heroTerminal.style.position = 'relative';
+                heroTerminal.appendChild(heroAvatar);
+            }
+            heroAvatar.innerHTML = `<img src="${s.heroImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+        } else if (heroAvatar) {
+            // heroImage was removed → delete the floating avatar
+            heroAvatar.remove();
         }
     }
 
