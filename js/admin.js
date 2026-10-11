@@ -11,11 +11,21 @@ const adminState = {
     editingType: null
 };
 
-// ── Demo Credentials ─────────────────────────────────────────
-const DEMO_CREDENTIALS = {
-    username: 'admin',
-    password: 'admin123'
+// ── Credentials (SHA-256 hashed — never store plaintext) ─────
+// Default: username "admin", password "admin123"
+// You can CHANGE these by editing the hashes below.
+// To generate a new hash, open browser console and run:
+//   crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'))
+//     .then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')));
+const ADMIN_HASH = {
+    username: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',  // sha256("admin")
+    password: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'   // sha256("admin123")
 };
+
+async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, '0')).join('');
+}
 
 // ── Initialize ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
