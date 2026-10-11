@@ -437,12 +437,12 @@ function applySiteSettings() {
     if (!Object.keys(s).length) return;
 
     // Navbar avatar (uses profileImage)
+    // Navbar avatar (uses profileImage)
     const navAvatar = document.getElementById('navAvatar');
     if (navAvatar) {
         if (s.profileImage) {
-            navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
+            navAvatar.innerHTML = `<span class="nav-avatar-logo"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span><img src="${s.profileImage}" alt="Profile">`;
         } else {
-            // No image → keep the <SH/> logo fallback
             navAvatar.innerHTML = `<span class="nav-avatar-logo"><span class="logo-bracket">&lt;</span><span class="logo-text">SH</span><span class="logo-bracket">/&gt;</span></span>`;
         }
     }
