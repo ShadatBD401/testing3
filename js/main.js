@@ -34,10 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function initTheme() {
     const savedTheme = Utils.getTheme();
     document.documentElement.setAttribute('data-theme', savedTheme);
-    Utils.updateThemeIcon(savedTheme);
     
+    // Inline the icon update — no dependency on Utils.updateThemeIcon
     const toggle = document.getElementById('themeToggle');
     if (toggle) {
+        const icon = toggle.querySelector('i');
+        if (icon) {
+            icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        
         toggle.addEventListener('click', () => {
             const newTheme = Utils.toggleTheme();
             Utils.showToast(`Switched to ${newTheme} mode`, 'info');
