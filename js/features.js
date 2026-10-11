@@ -269,17 +269,42 @@ function initCustomCursor() {
     document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
     document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
 
-    // Hide cursor when window loses focus (e.g. during screenshots)
-    window.addEventListener('blur', () => {
+    // Hide cursor when window loses focus, tab hidden, or mouse idle
+    function hideCursor() {
+        cursor.style.opacity = '0';
+        follower.style.opacity = '0';
+        smoke.style.opacity = '0';
         cursor.style.display = 'none';
         follower.style.display = 'none';
         smoke.style.display = 'none';
-    });
-    window.addEventListener('focus', () => {
+    }
+    function showCursor() {
         cursor.style.display = '';
         follower.style.display = '';
         smoke.style.display = '';
+        cursor.style.opacity = '';
+        follower.style.opacity = '';
+        smoke.style.opacity = '';
+    }
+
+    window.addEventListener('blur', hideCursor);
+    window.addEventListener('focus', showCursor);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) hideCursor();
+        else showCursor();
     });
+
+    // Idle hide — 2s of no mouse movement hides the cursor.
+    let idleTimer = null;
+    document.addEventListener('mousemove', () => {
+        showCursor();
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(hideCursor, 2000);
+    });
+
+    // Belt-and-suspenders: hide on print
+    window.addEventListener('beforeprint', hideCursor);
+    window.addEventListener('afterprint', showCursor);
 }
 
 // ── Ticket Tracking ──────────────────────────────────────────
