@@ -2517,11 +2517,11 @@ input, textarea, select {
 /* ── Theme Switcher UI ────────────────────────────────────── */
 .theme-switcher {
     position: fixed;
-    bottom: 100px;
+    bottom: 30px;
     right: 30px;
     z-index: 9998;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 8px;
     align-items: center;
 }
