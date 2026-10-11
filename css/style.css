@@ -3280,3 +3280,12 @@ input, textarea, select {
         font-size: 0.75rem;
     }
 }
+
+/* Hide custom cursor during print/screenshots */
+@media print {
+    .custom-cursor,
+    .cursor-follower,
+    .cursor-smoke {
+        display: none !important;
+    }
+}
