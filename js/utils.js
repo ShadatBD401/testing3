@@ -191,7 +191,18 @@ function setTheme(theme) {
 function toggleTheme() {
     const current = getTheme();
     const next = current === 'dark' ? 'light' : 'dark';
-    setTheme(next);
+    document.documentElement.setAttribute('data-theme', next);
+    setStorage(STORAGE_KEYS.THEME, next);
+    
+    // Inline icon update — no dependency on updateThemeIcon
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        const icon = toggle.querySelector('i');
+        if (icon) {
+            icon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    }
+    
     return next;
 }
 
