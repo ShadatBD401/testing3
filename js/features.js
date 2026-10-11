@@ -403,6 +403,10 @@ function applySiteSettings() {
     // Profile image as floating avatar over hero terminal
     if (s.profileImage) {
         const heroTerminal = document.querySelector('.hero-terminal');
+        const navAvatar = document.getElementById('navAvatar');
+        if (navAvatar) {
+            navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
+    }
         if (heroTerminal && !document.getElementById('heroProfileImg')) {
             const avatar = document.createElement('div');
             avatar.id = 'heroProfileImg';
@@ -411,10 +415,8 @@ function applySiteSettings() {
             heroTerminal.style.position = 'relative';
             heroTerminal.appendChild(avatar);
     }
-        const navAvatar = document.getElementById('navAvatar');
-        if (navAvatar) {
-            navAvatar.innerHTML = `<img src="${s.profileImage}" alt="Profile">`;
-    }
+        
+        
 
     // Navbar social links
     const navSocial = document.querySelector('.nav-social');
