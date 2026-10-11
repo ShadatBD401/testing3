@@ -439,7 +439,6 @@ window.Utils = {
     getTheme,
     setTheme,
     toggleTheme,
-    updateThemeIcon,          // ← ADD THIS LINE
     scrollToSection,
     isValidEmail,
     isValidUrl,
