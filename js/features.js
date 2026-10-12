@@ -127,13 +127,17 @@ function initGlobalSearch() {
 
     function goTo(sectionId) {
         closeSearch();
+        if (sectionId === 'gallery') {
+            window.location.href = 'gallery.html';
+            return;
+        }
         const target = document.getElementById(sectionId);
         if (target) {
             const navHeight = document.getElementById('navbar')?.offsetHeight || 80;
             window.scrollTo({ top: target.offsetTop - navHeight, behavior: 'smooth' });
         }
     }
-
+   
     function openSearch() {
         buildIndex();
         modal.classList.add('open');
