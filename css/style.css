@@ -3354,62 +3354,298 @@ input, textarea, select {
 }
 
 /* ── Hero Terminal Floating Avatar — Animated Ring ─────────── */
+/* ── Hero Terminal Floating Avatar — Premium Animated Ring ─ */
 #heroProfileImg {
     position: absolute;
-    top: -30px;
-    right: -30px;
-    width: 130px;
-    height: 130px;
+    top: -32px;
+    right: -32px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     z-index: 10;
     background: var(--bg-secondary);
-    padding: 4px;                         /* ring thickness */
+    padding: 5px;
     isolation: isolate;
-    animation: heroAvatarPulse 4s ease-in-out infinite;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Rotating conic-gradient ring */
+/* Ring layer 1 — the sharp rotating conic gradient */
 #heroProfileImg::before {
     content: '';
     position: absolute;
-    inset: -2px;
+    inset: -3px;
     border-radius: 50%;
-    padding: 2px;
+    padding: 3px;
     background: conic-gradient(
         from 0deg,
-        var(--accent-primary),
-        var(--accent-secondary),
-        var(--accent-tertiary),
-        var(--accent-primary)
+        transparent 0deg,
+        var(--accent-primary) 60deg,
+        var(--accent-secondary) 140deg,
+        var(--accent-tertiary) 220deg,
+        var(--accent-primary) 300deg,
+        transparent 360deg
     );
     -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: heroAvatarSpin 6s linear infinite;
-    z-index: 1;
+            mask-composite: exclude;
+    animation: heroRingSpin 4s linear infinite;
+    z-index: 2;
     pointer-events: none;
+    will-change: transform;
 }
 
-/* Inner circular container for the picture */
+/* Ring layer 2 — soft outer glow that pulses */
+#heroProfileImg::after {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(59, 130, 246, 0.35) 0%,
+        rgba(139, 92, 246, 0.18) 40%,
+        transparent 70%
+    );
+    filter: blur(14px);
+    z-index: 0;
+    pointer-events: none;
+    animation: heroGlowPulse 3s ease-in-out infinite;
+}
+
+/* Picture itself */
 #heroProfileImg > img {
     position: absolute;
-    inset: 6px;
-    width: calc(100% - 12px);
-    height: calc(100% - 12px);
+    inset: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
     border-radius: 50%;
     object-fit: cover;
-    z-index: 0;
+    z-index: 1;
     display: block;
     background: var(--bg-tertiary);
+    border: 2px solid var(--bg-secondary);
+    transition: transform 0.35s ease;
 }
 
-@keyframes heroAvatarSpin {
+/* Hover — subtle lift */
+#heroProfileImg:hover {
+    transform: scale(1.04);
+}
+#heroProfileImg:hover > img {
+    transform: scale(1.02);
+}
+
+@keyframes heroRingSpin {
     to { transform: rotate(360deg); }
 }
 
-@keyframes heroAvatarPulse {
-    0%, 100% { box-shadow: 0 0 24px rgba(59, 130, 246, 0.35), 0 0 48px rgba(139, 92, 246, 0.15); }
-    50%      { box-shadow: 0 0 36px rgba(59, 130, 246, 0.55), 0 0 72px rgba(139, 92, 246, 0.30); }
+@keyframes heroGlowPulse {
+    0%, 100% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.06);
+    }
+}
+
+/* ── Rocket Launch Animation ─────────────────────────────── */
+#heroProfileImg.rocket-mode {
+    pointer-events: none;
+}
+
+#heroProfileImg.rocket-mode::before,
+#heroProfileImg.rocket-mode::after {
+    display: none;
+}
+
+#heroProfileImg.rocket-mode > img {
+    opacity: 0;
+    transform: scale(0.4);
+}
+
+#heroProfileImg.rocket-mode .rocket-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    z-index: 5;
+    filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.8))
+            drop-shadow(0 0 24px rgba(255, 60, 0, 0.5));
+    animation: rocketWobble 0.35s ease-in-out infinite;
+}
+
+/* Whole container takes off */
+#heroProfileImg.rocket-mode {
+    animation: rocketOrbit 2.6s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+
+@keyframes rocketOrbit {
+    /* Fly from current position, loop around screen twice, return */
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    8% {
+        transform: translate(-40vw, -30vh) scale(1.1);
+    }
+    25% {
+        transform: translate(40vw, -30vh) scale(1.2);
+    }
+    42% {
+        transform: translate(40vw, 30vh) scale(1.15);
+    }
+    60% {
+        transform: translate(-40vw, 30vh) scale(1.1);
+    }
+    75% {
+        transform: translate(-40vw, -20vh) scale(1.05);
+    }
+    90% {
+        transform: translate(20vw, 10vh) scale(1);
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rocketWobble {
+    0%, 100% { transform: rotate(-4deg); }
+    50%      { transform: rotate(4deg); }
+}
+
+/* Flame trail element (injected by JS) */
+.rocket-trail {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 220, 100, 0.95) 0%,
+        rgba(255, 140, 40, 0.7) 40%,
+        rgba(255, 60, 0, 0.35) 70%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 99998;
+    filter: blur(2px);
+    animation: trailFade 0.7s ease-out forwards;
+}
+
+@keyframes trailFade {
+    0% {
+        transform: scale(0.6) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.2) translateY(-18px);
+        opacity: 0;
+    }
+}
+
+/* ── Rocket Launch Animation ─────────────────────────────── */
+#heroProfileImg.rocket-mode {
+    pointer-events: none;
+}
+
+#heroProfileImg.rocket-mode::before,
+#heroProfileImg.rocket-mode::after {
+    display: none;
+}
+
+#heroProfileImg.rocket-mode > img {
+    opacity: 0;
+    transform: scale(0.4);
+}
+
+#heroProfileImg.rocket-mode .rocket-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    z-index: 5;
+    filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.8))
+            drop-shadow(0 0 24px rgba(255, 60, 0, 0.5));
+    animation: rocketWobble 0.35s ease-in-out infinite;
+}
+
+/* Whole container takes off */
+#heroProfileImg.rocket-mode {
+    animation: rocketOrbit 2.6s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+
+@keyframes rocketOrbit {
+    /* Fly from current position, loop around screen twice, return */
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    8% {
+        transform: translate(-40vw, -30vh) scale(1.1);
+    }
+    25% {
+        transform: translate(40vw, -30vh) scale(1.2);
+    }
+    42% {
+        transform: translate(40vw, 30vh) scale(1.15);
+    }
+    60% {
+        transform: translate(-40vw, 30vh) scale(1.1);
+    }
+    75% {
+        transform: translate(-40vw, -20vh) scale(1.05);
+    }
+    90% {
+        transform: translate(20vw, 10vh) scale(1);
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rocketWobble {
+    0%, 100% { transform: rotate(-4deg); }
+    50%      { transform: rotate(4deg); }
+}
+
+/* Flame trail element (injected by JS) */
+.rocket-trail {
+    position: fixed;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 220, 100, 0.95) 0%,
+        rgba(255, 140, 40, 0.7) 40%,
+        rgba(255, 60, 0, 0.35) 70%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 99998;
+    filter: blur(2px);
+    animation: trailFade 0.7s ease-out forwards;
+}
+
+@keyframes trailFade {
+    0% {
+        transform: scale(0.6) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.2) translateY(-18px);
+        opacity: 0;
+    }
 }
