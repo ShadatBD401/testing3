@@ -3371,10 +3371,10 @@ input, textarea, select {
     right: -32px;
     width: 140px;
     height: 140px;
-    border-radius: 20%;
+    border-radius: 50%;
     z-index: 10;
     background: var(--bg-secondary);
-    padding: 5px;
+    padding: 2px;
     isolation: isolate;
     cursor: pointer;
     user-select: none;
