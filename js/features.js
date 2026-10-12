@@ -642,6 +642,49 @@ function initGallery() {
     render();
 }
 
+// ── Rocket Launch 🚀 ─────────────────────────────────────────
+function launchRocket() {
+    const avatar = document.getElementById('heroProfileImg');
+    if (!avatar) return;
+    if (avatar.classList.contains('rocket-mode')) return;   // already flying
+
+    // Save any existing image
+    const img = avatar.querySelector('img');
+
+    // Replace inner content with rocket icon
+    avatar.innerHTML = `<span class="rocket-icon">🚀</span>`;
+
+    // Enter rocket mode
+    avatar.classList.add('rocket-mode');
+
+    // Spawn flame trail dots along the rocket's flight path
+    const trailInterval = setInterval(() => {
+        const rect = avatar.getBoundingClientRect();
+        const dot = document.createElement('div');
+        dot.className = 'rocket-trail';
+        // Random offset for organic look
+        const offsetX = (Math.random() - 0.5) * 30;
+        const offsetY = (Math.random() - 0.5) * 30;
+        dot.style.left = (rect.left + rect.width / 2 + offsetX) + 'px';
+        dot.style.top  = (rect.top  + rect.height / 2 + offsetY) + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 700);
+    }, 30);
+
+    // End animation after 2.6s
+    setTimeout(() => {
+        clearInterval(trailInterval);
+        avatar.classList.remove('rocket-mode');
+        // Restore the picture
+        const s = Utils.getStorage(Utils.STORAGE_KEYS.SETTINGS, {});
+        if (s.heroImage) {
+            avatar.innerHTML = `<img src="${s.heroImage}" alt="Profile">`;
+        } else {
+            avatar.remove();
+        }
+    }, 2600);
+}
+
 // ── Init on DOM ready ────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initThemeSwitcher();
