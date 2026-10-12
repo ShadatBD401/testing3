@@ -640,7 +640,6 @@ function initGallery() {
     });
 
     window.addEventListener('storage', render);
-    window.addEventListener('gallery-updated', render);
 
     render();
 }
