@@ -3372,7 +3372,7 @@ input, textarea, select {
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    z-index: 2;
+    z-index: 10;
     background: var(--bg-secondary);
     padding: 5px;
     isolation: isolate;
