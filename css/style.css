@@ -608,7 +608,6 @@ input, textarea, select {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
-    backdrop-filter: blur(10px);
 }
 
 .stat-item {
@@ -1879,7 +1878,6 @@ input, textarea, select {
     left: var(--space-md);
     padding: var(--space-xs) var(--space-sm);
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
     border-radius: var(--radius-sm);
     font-size: 0.75rem;
     font-weight: 500;
@@ -2321,7 +2319,6 @@ input, textarea, select {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2731,7 +2728,6 @@ input, textarea, select {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
     z-index: 10002;
     display: flex;
     align-items: flex-start;
