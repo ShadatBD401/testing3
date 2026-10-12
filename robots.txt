@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /js/admin.js
-Disallow: /js/admin-features.js
-Disallow: /admin.html
