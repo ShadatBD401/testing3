@@ -275,10 +275,12 @@ function initCustomCursor() {
         cursor.style.opacity = '0';
         follower.style.opacity = '0';
         smoke.style.opacity = '0';
-        cursor.style.display = 'none';
-        follower.style.display = 'none';
-        smoke.style.display = 'none';
+        // REMOVE these three lines:
+        // cursor.style.display = 'none';
+        // follower.style.display = 'none';
+        // smoke.style.display = 'none';
     }
+
     function showCursor() {
         cursor.style.display = '';
         follower.style.display = '';
