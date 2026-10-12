@@ -346,8 +346,9 @@ input, textarea, select {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 10px;                           /* was var(--space-md) = 1rem = 16px */
+    gap: 6px;
     flex-shrink: 0;
+    text-decoration: none;
 }
 
 .logo-icon {
