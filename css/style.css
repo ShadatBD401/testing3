@@ -3372,9 +3372,9 @@ input, textarea, select {
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    z-index: 10;
+    z-index: 2;
     background: var(--bg-secondary);
-    padding: 2px;
+    padding: 5px;
     isolation: isolate;
     cursor: pointer;
     user-select: none;
