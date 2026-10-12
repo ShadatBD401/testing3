@@ -3367,8 +3367,8 @@ input, textarea, select {
 /* ── Hero Terminal Floating Avatar — Premium Animated Ring ─ */
 #heroProfileImg {
     position: absolute;
-    top: -22px;
-    right: -22px;
+    top: -32px;
+    right: -32px;
     width: 140px;
     height: 140px;
     border-radius: 50%;
