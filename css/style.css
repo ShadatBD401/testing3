@@ -346,7 +346,7 @@ input, textarea, select {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 10px;                           /* was var(--space-md) = 1rem = 16px */
     flex-shrink: 0;
 }
 
@@ -372,6 +372,7 @@ input, textarea, select {
 .logo-info {
     display: flex;
     flex-direction: column;
+    line-height: 1.15;                   /* tighter vertical rhythm */
 }
 
 .logo-name {
