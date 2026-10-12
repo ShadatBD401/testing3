@@ -2854,8 +2854,18 @@ input, textarea, select {
 
 /* ── Custom Mouse Cursor (Smokey Circle) ──────────────────── */
 @media (hover: hover) and (pointer: fine) {
-    * { cursor: none !important; }
-    input, textarea, [contenteditable] { cursor: text !important; }
+    body.custom-cursor-active * { cursor: none !important; }
+    body.custom-cursor-active input,
+    body.custom-cursor-active textarea,
+    body.custom-cursor-active [contenteditable] { cursor: text !important; }
+}
+
+/* Screenshot / Print safety — never hide core UI */
+@media print, (scripting: none) {
+    .custom-cursor,
+    .cursor-follower,
+    .cursor-smoke { display: none !important; }
+    .navbar, .hero-section, main, section { visibility: visible !important; opacity: 1 !important; }
 }
 
 .custom-cursor {
