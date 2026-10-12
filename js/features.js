@@ -206,8 +206,9 @@ function initGlobalSearch() {
 // ── Custom Mouse Cursor (Smokey) ─────────────────────────────
 function initCustomCursor() {
     if (window.matchMedia('(hover: none)').matches) return;
-    if (document.querySelector('.custom-cursor')) return; // avoid duplicates
-
+    if (document.querySelector('.custom-cursor')) return;
+    document.body.classList.add('custom-cursor-active');   // ← ADD THIS LINE
+   
     const cursor = document.createElement('div');
     cursor.className = 'custom-cursor';
 
