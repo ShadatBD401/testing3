@@ -373,7 +373,9 @@ input, textarea, select {
 .logo-info {
     display: flex;
     flex-direction: column;
-    line-height: 1.15;                   /* tighter vertical rhythm */
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
 }
 
 .logo-name {
