@@ -3369,9 +3369,9 @@ input, textarea, select {
     position: absolute;
     top: -32px;
     right: -32px;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+    border-radius: 20%;
     z-index: 10;
     background: var(--bg-secondary);
     padding: 5px;
