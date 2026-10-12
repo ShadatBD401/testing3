@@ -335,12 +335,12 @@ input, textarea, select {
 .nav-container {
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: 0 var(--space-xl);
+    padding: 0 24px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-xl);
+    gap: 16px;
 }
 
 .nav-logo {
@@ -377,14 +377,17 @@ input, textarea, select {
 
 .logo-name {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     color: var(--text-primary);
+    line-height: 1.1;
 }
 
 .logo-role {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
+    line-height: 1.2;
+    margin-top: 1px;
 }
 
 .nav-menu {
