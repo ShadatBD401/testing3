@@ -455,13 +455,21 @@ function applySiteSettings() {
             if (!heroAvatar) {
                 heroAvatar = document.createElement('div');
                 heroAvatar.id = 'heroProfileImg';
-                heroAvatar.style.cssText = 'position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;overflow:hidden;border:4px solid var(--accent-primary);box-shadow:var(--shadow-glow);background:var(--bg-secondary);z-index:10;';
+                heroAvatar.title = 'Double-click for a surprise 🚀';
                 heroTerminal.style.position = 'relative';
                 heroTerminal.appendChild(heroAvatar);
+                // Attach the rocket launcher once
+                heroAvatar.addEventListener('dblclick', launchRocket);
             }
-            heroAvatar.innerHTML = `<img src="${s.heroImage}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+            // Preserve the rocket icon element if it exists
+            if (!heroAvatar.querySelector('.rocket-icon')) {
+                heroAvatar.innerHTML = `<img src="${s.heroImage}" alt="Profile">`;
+            } else {
+                // just update the image
+                const img = heroAvatar.querySelector('img');
+                if (img) img.src = s.heroImage;
+            }
         } else if (heroAvatar) {
-            // heroImage was removed → delete the floating avatar
             heroAvatar.remove();
         }
     }
